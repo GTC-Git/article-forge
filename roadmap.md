@@ -10,11 +10,11 @@ Documentation-first, then one station at a time. Each station is a GitHub issue,
 - [x] ADR 002 — station architecture with file-based chaining
 - [x] Roadmap and station issues
 
-## Phase B — Skeleton
+## Phase B — Skeleton (done)
 
-- [ ] Project structure (`src/`, `tests/`, `forge.yaml` example)
-- [ ] CLI entry point with `cmd_<name>` dispatch pattern
-- [ ] Provider abstraction (`base.py`, `mock.py`)
+- [x] Project structure (`src/`, `tests/`, `forge.yaml` example)
+- [x] CLI entry point with `cmd_<name>` dispatch pattern
+- [x] Provider abstraction (`base.py`, `mock.py`)
 
 ## Phase C — Stations, one at a time
 
