@@ -24,7 +24,18 @@ The pipeline stops after `plan` and waits for explicit human approval before spe
 
 ## Status
 
-Early stage. Documentation-first: architecture and decisions are being written before any code. See `docs/` and `roadmap.md`.
+Early stage. Documentation-first: architecture and ADRs came before any code (see `docs/` and `roadmap.md`). Current state: project skeleton, minimal CLI and provider abstraction with mock — phases A and B of the roadmap complete. Station development starts next.
+
+## Development
+
+Requires Python 3.10+. No external dependencies yet.
+
+Run the CLI from the repository root:
+
+```powershell
+$env:PYTHONPATH = "src"
+python -m forge.cli version
+```
 
 ## Credits
 
