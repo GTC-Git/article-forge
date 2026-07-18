@@ -26,9 +26,9 @@ No mode, language, category, or slug flags. Every other value is decided by
 the station that has the right context for it:
 
 - Language: always English for the original article (skill rule; translations
-  are a later station).
-- Slug, title, category, tags, keywords: decided by the planning station,
-  based on the scan of existing articles.
+  are the translate station).
+- Slug, title, category, tags, keywords: decided by the plan station, based
+  on the inventory produced by the scan station.
 - Category is restricted to the closed list extracted by the scan station.
   A new category requires human approval at the plan checkpoint.
 
@@ -37,14 +37,14 @@ the station that has the right context for it:
 Following the `cmd_<name>` dispatch pattern inherited from video_explainer,
 each skill mode maps to its own CLI command:
 
-| Skill mode   | Command                     | Status  |
-|--------------|-----------------------------|---------|
-| Full Article | `forge new "topic"`         | this ADR|
-| Plan         | checkpoint inside `forge new` | this ADR|
-| Rewrite      | `forge rewrite <file>`      | planned |
-| Expand       | `forge expand <file> "..."` | planned |
-| SEO          | `forge seo <file>`          | planned |
-| QA           | `forge qa <file>`           | planned |
+| Skill mode   | Command                       | Status   |
+|--------------|-------------------------------|----------|
+| Full Article | `forge new "topic"`           | this ADR |
+| Plan         | checkpoint inside `forge new` | this ADR |
+| Rewrite      | `forge rewrite <file>`        | planned  |
+| Expand       | `forge expand <file> "..."`   | planned  |
+| SEO          | `forge seo <file>`            | planned  |
+| QA           | `forge qa <file>`             | planned  |
 
 Plan is not a separate command: the pipeline always stops at the plan
 checkpoint and waits for human approval, so a "plan-only" run is simply a
@@ -56,9 +56,15 @@ command prints the valid command list instead of a traceback.
 
 ### Pipeline flow
 
-    intake -> scan -> planning -> [checkpoint: human approval] -> writing -> QA -> render
+The full run follows the eight-station architecture defined in
+`docs/architecture.md`:
 
-Plan revision in v1 is manual: the user edits `03-plan.json` directly and
+    intake -> scan -> conflict -> plan -> [checkpoint: human approval]
+      -> write -> qa -> render
+
+The translate station runs as a separate command after publication.
+
+Plan revision in v1 is manual: the user edits `04-plan.json` directly and
 approves. An LLM-based `forge revise` command (parity with video_explainer's
 `plan review`) is planned as a future issue.
 
@@ -92,9 +98,10 @@ The station creates the run directory and writes `01-intake.json`:
 
 - `run_id` = timestamp + provisional topic fragment. Human-readable and
   collision-safe. The fragment only names the folder; the editorial slug is
-  decided later by planning.
+  decided later by the plan station.
 - Numeric file prefixes (`01-`, `02-`, ...) keep the run folder readable as a
-  timeline, as in video_explainer.
+  timeline, as in video_explainer. Each station writes its own numbered file
+  (`02-scan.json`, `03-conflict.json`, `04-plan.json`, ...).
 - Station files use JSON (stdlib parsing, deterministic writes). YAML remains
   only for user-facing configuration.
 - The runs directory is configurable in `forge.yaml` (`runs_dir`), default
