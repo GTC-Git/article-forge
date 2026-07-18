@@ -22,19 +22,49 @@ Article Forge is a Python CLI that runs an article through a chain of stations, 
 
 The pipeline stops after `plan` and waits for explicit human approval before spending API credits on writing.
 
+## Usage
+
+Each task mode is its own command (ADR 003):
+
+| Command | Purpose | Status |
+|---------|---------|--------|
+| `forge new "topic"` | Create a full article from a topic | available |
+| `forge version` | Show the forge version | available |
+| `forge rewrite <file>` | Rewrite or improve an existing article | planned |
+| `forge expand <file> "..."` | Add depth or sections to an existing article | planned |
+| `forge seo <file>` | Improve metadata and search positioning | planned |
+| `forge qa <file>` | Audit an article for publishing issues | planned |
+
+Run `forge --help` for the full command list, or `forge <command> --help` for details.
+
+### Runs
+
+Every `forge new` execution creates a run: a timestamped folder under `runs/`
+holding one numbered file per station (`01-intake.json`, `02-scan.json`, ...).
+The run folder tells the story of the pipeline in order and is the handoff
+mechanism between stations. `runs/` is a local work area and is never
+committed.
+
 ## Status
 
-Early stage. Documentation-first: architecture and ADRs came before any code (see `docs/` and `roadmap.md`). Current state: project skeleton, minimal CLI and provider abstraction with mock — phases A and B of the roadmap complete. Station development starts next.
+Early stage. Documentation-first: architecture and ADRs came before any code (see `docs/` and `roadmap.md`). Phases A and B of the roadmap are complete (project skeleton, minimal CLI, provider abstraction with mock). Phase C in progress: station 1 (`intake`) is implemented and tested — `forge new` validates the topic and starts the run chain.
 
 ## Development
 
-Requires Python 3.10+. No external dependencies yet.
+Requires Python 3.10+. Runtime has no external dependencies; tests use [pytest](https://pytest.org).
 
 Run the CLI from the repository root:
 
 ```powershell
 $env:PYTHONPATH = "src"
 python -m forge.cli version
+```
+
+Run the tests:
+
+```powershell
+$env:PYTHONPATH = "src"
+python -m pytest tests/ -v
 ```
 
 ## Credits
