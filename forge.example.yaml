@@ -1,0 +1,10 @@
+# Copy this file to forge.yaml and adjust the values for your machine.
+# forge.yaml is git-ignored: it holds machine-specific paths.
+
+blog:
+  # Absolute path to the blog content folder that contains the locale folders
+  # (en/, pt/, es/, uk/). Use forward slashes, including on Windows.
+  content_path: "C:/Users/you/Projects/your-blog/src/content/blog"
+
+  # URL pattern used for internal links in the published site.
+  url_pattern: "/{locale}/blog/{slug}"
